@@ -3,3 +3,4 @@ pub const integers = @import("integers");
 pub const arrays = @import("arrays");
 pub const vector = @import("vector");
 pub const struct_test = @import("struct");
+pub const allocation = @import("allocation");
