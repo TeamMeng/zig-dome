@@ -4,3 +4,4 @@ pub const arrays = @import("arrays");
 pub const vector = @import("vector");
 pub const struct_test = @import("struct");
 pub const allocation = @import("allocation");
+pub const mcp_demo = @import("mcp_demo");
