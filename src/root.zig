@@ -5,5 +5,5 @@ pub const vector = @import("vector");
 pub const struct_test = @import("struct");
 pub const allocation = @import("allocation");
 pub const mcp_demo = @import("mcp_demo");
-pub const union_demo = @import("union.zig");
+pub const union_demo = @import("union_demo.zig");
 pub const comptime_demo = @import("comptime_demo");
