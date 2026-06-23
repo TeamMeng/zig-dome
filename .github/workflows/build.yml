@@ -11,6 +11,9 @@ jobs:
       - uses: goto-bus-stop/setup-zig@v2
         with:
           version: 0.15.2
+      - name: Set macOS SDK root
+        if: runner.os == 'macOS'
+        run: echo "SDKROOT=$(xcrun --show-sdk-path)" >> $GITHUB_ENV
       - run: zig build test
   lint:
     runs-on: ubuntu-latest

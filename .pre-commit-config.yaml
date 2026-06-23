@@ -1,0 +1,10 @@
+repos:
+  - repo: local
+    hooks:
+      - id: zig-fmt
+        name: zig fmt
+        entry: zig fmt --check .
+        language: system
+        types: [text]
+        files: '\.zig$'
+        pass_filenames: false
