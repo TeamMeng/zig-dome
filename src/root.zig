@@ -7,3 +7,4 @@ pub const allocation = @import("allocation");
 pub const mcp_demo = @import("mcp_demo");
 pub const union_demo = @import("union_demo.zig");
 pub const comptime_demo = @import("comptime_demo");
+pub const day_five = @import("day-5.zig");
