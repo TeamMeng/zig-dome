@@ -8,3 +8,4 @@ pub const mcp_demo = @import("mcp_demo");
 pub const union_demo = @import("union_demo.zig");
 pub const comptime_demo = @import("comptime_demo");
 pub const day_five = @import("day-5.zig");
+pub const day_six = @import("day-6.zig");
