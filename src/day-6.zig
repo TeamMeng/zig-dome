@@ -51,3 +51,40 @@ test "apply" {
     const result2 = apply(mul, 5, 6);
     std.debug.print("apply add: {}, mul:{}\n", .{ result1, result2 });
 }
+
+fn max(a: i32, b: i32) i32 {
+    return if (a >= b) a else b;
+}
+
+test "max" {
+    std.debug.print("1 max 2: {}\n", .{max(1, 2)});
+}
+
+const Point = struct {
+    x: f64,
+    y: f64,
+
+    pub fn distanceTo(self: Point, other: Point) f64 {
+        const dx = self.x - other.x;
+        const dy = self.y - other.y;
+        return @sqrt(dx * dx + dy * dy);
+    }
+};
+
+test "point" {
+    const p1 = Point{ .x = 5, .y = 5 };
+    const p2 = Point{ .x = 1, .y = 2 };
+    std.debug.print("distanceTo: {}\n", .{p1.distanceTo(p2)});
+}
+
+fn mul2(a: i32) i32 {
+    return a * 2;
+}
+
+fn applyTwice(op: fn (i32) i32, x: i32) i32 {
+    return op(x);
+}
+
+test "twice" {
+    std.debug.print("applyTwice: {}\n", .{applyTwice(mul2, applyTwice(mul2, 3))});
+}
