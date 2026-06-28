@@ -9,3 +9,4 @@ pub const union_demo = @import("union_demo.zig");
 pub const comptime_demo = @import("comptime_demo");
 pub const day_five = @import("day-5.zig");
 pub const day_six = @import("day-6.zig");
+pub const day_seven = @import("day-7.zig");
