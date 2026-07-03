@@ -64,3 +64,12 @@ test "mem" {
 
     defer allocator.free(ptr);
 }
+
+// test "io" {
+//     var buffer: [1024]u8 = undefined;
+//
+//     var stdin = std.Io.File.stdin().reader(std.testing.io, &buffer);
+//     const line = try stdin.interface.takeDelimiterExclusive('\n');
+//
+//     std.debug.print("{s}\n", .{line});
+// }
