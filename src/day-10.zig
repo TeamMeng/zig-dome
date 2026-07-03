@@ -73,3 +73,25 @@ test "mem" {
 //
 //     std.debug.print("{s}\n", .{line});
 // }
+
+// test "net" {
+//     const io = std.testing.io;
+//
+//     const address = std.Io.net.IpAddress.parse("127.0.0.1", 8080) catch unreachable;
+//     var server = try address.listen(io, .{ .reuse_address = true });
+//     defer server.deinit(io);
+//
+//     while (true) {
+//         const stream = try server.accept(io);
+//         defer stream.close(io);
+//
+//         var in_buf: [1024]u8 = undefined;
+//         var reader = stream.reader(io, &in_buf);
+//         _ = reader.interface.takeDelimiterExclusive('\n') catch {};
+//
+//         var out_buf: [1024]u8 = undefined;
+//         var writer = stream.writer(io, &out_buf);
+//         try writer.interface.writeAll("HTTP/1.1 200 OK\r\nContent-Length: 15\r\nConnection: close\r\n\r\nHello from Zig!");
+//         try writer.interface.flush();
+//     }
+// }
