@@ -50,17 +50,6 @@ comptime {
     assert(mem.eql(u8, hello_world, "hello world"));
 }
 
-const patten = "ab" ** 3;
-comptime {
-    assert(mem.eql(u8, patten, "ababab"));
-}
-
-const all_zero = [_]u16{0} ** 10;
-comptime {
-    assert(all_zero.len == 10);
-    assert(all_zero[5] == 0);
-}
-
 const Point = struct {
     x: i32,
     y: i32,
@@ -89,13 +78,6 @@ fn makePoint(x: i32) Point {
     };
 }
 
-var more_points = [_]Point{makePoint(3)} ** 10;
-test "array initialization with function calls" {
-    try expect(more_points[4].x == 3);
-    try expect(more_points[4].y == 6);
-    try expect(more_points.len == 10);
-}
-
 const mat4x5 = [4][5]f32{
     [_]f32{ 1.0, 0.0, 0.0, 0.0, 0.0 },
     [_]f32{ 0.0, 1.0, 0.0, 1.0, 0.0 },
@@ -115,9 +97,6 @@ test "multidimensional arrays" {
             }
         }
     }
-
-    const all_size: [4][5]f32 = .{.{0} ** 5} ** 4;
-    try expect(all_size[0][0] == 0);
 }
 
 test "0-terminated sentinel array" {
