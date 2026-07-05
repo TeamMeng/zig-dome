@@ -13,3 +13,4 @@ pub const day_seven = @import("day-7.zig");
 pub const day_eight = @import("day-8.zig");
 pub const day_night = @import("day-9.zig");
 pub const day_ten = @import("day-10.zig");
+pub const error_dome = @import("error.zig");
