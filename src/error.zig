@@ -37,3 +37,29 @@ test "parse u64" {
     const result = try parseU64("1234", 10);
     try std.testing.expectEqual(1234, result);
 }
+
+const A = error{
+    NotDir,
+    PathNotFound,
+};
+
+const B = error{
+    OutOfMemory,
+    PathNotFound,
+};
+
+const C = A || B;
+
+fn foo() C!void {
+    return error.NotDir;
+}
+
+test "merge error sets" {
+    if (foo()) {
+        @panic("unexpected");
+    } else |err| switch (err) {
+        error.OutOfMemory => @panic("unexpected"),
+        error.PathNotFound => @panic("unexpected"),
+        error.NotDir => {},
+    }
+}
