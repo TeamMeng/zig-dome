@@ -63,3 +63,21 @@ test "merge error sets" {
         error.NotDir => {},
     }
 }
+
+test "optional type" {
+    var noo: ?i32 = null;
+
+    noo = 1234;
+
+    try comptime std.testing.expectEqual(i32, @typeInfo(@TypeOf(noo)).optional.child);
+}
+
+test "optional pointers" {
+    var ptr: ?*i32 = null;
+
+    var x: i32 = 1;
+    ptr = &x;
+
+    try std.testing.expectEqual(1, ptr.?.*);
+    try std.testing.expectEqual(@sizeOf(?*i32), @sizeOf(*i32));
+}
