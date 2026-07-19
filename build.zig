@@ -89,7 +89,13 @@ pub fn build(b: *std.Build) void {
 
     // This allows the user to pass arguments to the application in the build
     // command itself, like this: `zig build run -- arg1 arg2 etc`
-    run_cmd.addPassthruArgs();
+    if (@hasDecl(@TypeOf(run_cmd.*), "addPassthruArgs")) {
+        run_cmd.addPassthruArgs();
+    } else if (@hasField(@TypeOf(b.*), "args")) {
+        if (b.args) |args| {
+            run_cmd.addArgs(args);
+        }
+    }
 
     // This creates a build step. It will be visible in the `zig build --help` menu,
     // and can be selected like this: `zig build run`
