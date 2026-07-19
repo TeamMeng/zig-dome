@@ -16,3 +16,4 @@ pub const day_ten = @import("day-10.zig");
 pub const error_dome = @import("error.zig");
 pub const casting_dome = @import("casting_dome.zig");
 pub const test_coerce_slices_arrays_and_pointers = @import("test_coerce_slices_arrays_and_pointers.zig");
+pub const http_demo = @import("http_demo.zig");

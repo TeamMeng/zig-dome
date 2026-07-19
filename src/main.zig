@@ -1,6 +1,10 @@
 const std = @import("std");
 
-pub fn main() !void {}
+const http_demo = @import("http_demo.zig");
+
+pub fn main(init: std.process.Init) !void {
+    try http_demo.main(init);
+}
 
 test "while" {
     var idx: i32 = 0;
