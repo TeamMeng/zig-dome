@@ -40,6 +40,10 @@
             .url = "git+https://github.com/muhammad-fiaz/mcp.zig.git#25b2ac418c5a62c48144eece0cb8b25ae0b45886",
             .hash = "mcp-0.0.5-cIUFgwGFBACgcv5OVy2tp7Vlc47GFpUQdaErzZDRz40C",
         },
+        .httpz = .{
+            .url = "git+https://github.com/karlseguin/http.zig?ref=master#52eb187cff75e168316b44480cd9f0fae26a1c5e",
+            .hash = "httpz-0.0.0-PNVzrL3oCADwWVoScHt1fFGTRyZMJ_FYa9reFvHhqq8Y",
+        },
     },
     .paths = .{
         "build.zig",

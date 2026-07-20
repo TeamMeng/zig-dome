@@ -1,9 +1,28 @@
 const std = @import("std");
 
 const http_demo = @import("http_demo.zig");
+const httpz = @import("httpz");
 
 pub fn main(init: std.process.Init) !void {
-    try http_demo.main(init);
+    const allocator = init.gpa;
+
+    var server = try httpz.Server(void).init(init.io, allocator, .{
+        .address = .localhost(8080),
+    }, {});
+    defer {
+        server.stop();
+        server.deinit();
+    }
+
+    var router = try server.router(.{});
+    router.get("/api/user", getUser, .{});
+
+    try server.listen();
+}
+
+fn getUser(req: *httpz.Request, res: *httpz.Response) !void {
+    _ = req;
+    res.status = 200;
 }
 
 test "while" {

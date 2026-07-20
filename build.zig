@@ -16,6 +16,10 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
 
     const mcp_dep = b.dependency("mcp", .{ .target = target, .optimize = optimize });
+    const httpz = b.dependency("httpz", .{
+        .target = target,
+        .optimize = optimize,
+    });
 
     // This creates a "module", which represents a collection of source files alongside
     // some compilation options, such as optimization mode and linked system libraries.
@@ -45,6 +49,7 @@ pub fn build(b: *std.Build) void {
     // This is what allows Zig source code to use `@import("foo")` where 'foo' is not a
     // file path. In this case, we set up `exe_mod` to import `lib_mod`.
     exe_mod.addImport("zig_dome_lib", lib_mod);
+    exe_mod.addImport("httpz", httpz.module("httpz"));
 
     lib_mod.addImport("mcp", mcp_dep.module("mcp"));
 
