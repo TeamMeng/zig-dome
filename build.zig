@@ -20,6 +20,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
+    const pg_module = b.dependency("pg", .{}).module("pg");
 
     // This creates a "module", which represents a collection of source files alongside
     // some compilation options, such as optimization mode and linked system libraries.
@@ -50,8 +51,11 @@ pub fn build(b: *std.Build) void {
     // file path. In this case, we set up `exe_mod` to import `lib_mod`.
     exe_mod.addImport("zig_dome_lib", lib_mod);
     exe_mod.addImport("httpz", httpz.module("httpz"));
+    exe_mod.addImport("pg", pg_module);
 
     lib_mod.addImport("mcp", mcp_dep.module("mcp"));
+    lib_mod.addImport("httpz", httpz.module("httpz"));
+    lib_mod.addImport("pg", pg_module);
 
     // Now, we will create a static library based on the module we created above.
     // This creates a `std.Build.Step.Compile`, which is the build step responsible
