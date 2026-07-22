@@ -5,4 +5,4 @@ GET http://127.0.0.1/api/user:8080
 GET http://localhost:8080/api/user
 
 ### test
-GET http://localhost:8080/api/user/99
+GET http://localhost:8080/api/user/1

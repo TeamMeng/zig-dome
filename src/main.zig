@@ -5,10 +5,13 @@ const pg = @import("pg");
 pub fn main(init: std.process.Init) !void {
     const allocator = init.gpa;
 
-    var db = try pg.Pool.init(init.io, allocator, .{ .connect = .{ .port = 5432, .host = "localhost" }, .auth = .{
-        .username = "postgres",
-        .database = "db",
-    } });
+    var db = try pg.Pool.init(init.io, allocator, .{
+        .connect = .{ .port = 5432, .host = "localhost" },
+        .auth = .{
+            .username = "postgres",
+            .database = "db",
+        },
+    });
     defer db.deinit();
 
     var app = App{
@@ -29,24 +32,34 @@ pub fn main(init: std.process.Init) !void {
     try server.listen();
 }
 
+const User = struct {
+    id: []const u8,
+    name: []const u8,
+};
+
 const App = struct {
     db: *pg.Pool,
+
+    fn getUser(self: *App, req: *httpz.Request) !User {
+        const user_id = req.param("id").?;
+
+        var row = try self.db.row("select name from \"user\" where id = $1", .{user_id}) orelse {
+            return error.NotFound;
+        };
+        defer row.deinit() catch {};
+
+        const name = try row.get([]u8, 0);
+        return User{
+            .id = user_id,
+            .name = name,
+        };
+    }
 };
 
 fn getUser(app: *App, req: *httpz.Request, res: *httpz.Response) !void {
-    const user_id = req.param("id").?;
+    const user = try app.getUser(req);
 
-    var row = try app.db.row("select name from \"user\" where id = $1", .{user_id}) orelse {
-        res.status = 404;
-        res.body = "Not Found";
-        return;
-    };
-    defer row.deinit() catch {};
-
-    try res.json(.{
-        .id = user_id,
-        .name = try row.get([]u8, 0),
-    }, .{});
+    try res.json(.{user}, .{});
 }
 
 test "while" {
