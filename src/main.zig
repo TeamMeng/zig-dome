@@ -15,6 +15,7 @@ pub fn main(init: std.process.Init) !void {
     defer db.deinit();
 
     var app = App{
+        .io = init.io,
         .db = db,
     };
 
@@ -38,6 +39,7 @@ const User = struct {
 };
 
 const App = struct {
+    io: std.Io,
     db: *pg.Pool,
 
     fn getUser(self: *App, req: *httpz.Request) !User {
@@ -53,6 +55,27 @@ const App = struct {
             .id = user_id,
             .name = name,
         };
+    }
+
+    pub fn dispatch(
+        self: *App,
+        action: httpz.Action(*App),
+        req: *httpz.Request,
+        res: *httpz.Response,
+    ) !void {
+        var start = std.Io.Timestamp.now(self.io, .awake);
+
+        try action(self, req, res);
+
+        const elapsed_us = start
+            .untilNow(self.io, .awake)
+            .toMicroseconds();
+
+        std.log.info("{} {s} {d}us", .{
+            req.method,
+            req.url.path,
+            elapsed_us,
+        });
     }
 };
 
