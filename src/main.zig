@@ -64,6 +64,12 @@ const App = struct {
         };
     }
 
+    pub fn notFound(_: *App, req: *httpz.Request, res: *httpz.Response) !void {
+        std.log.info("404 {} {s}", .{ req.method, req.url.path });
+        res.status = 404;
+        res.body = "Not Found";
+    }
+
     pub fn dispatch(
         self: *App,
         action: httpz.Action(*RequestContext),
