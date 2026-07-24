@@ -38,6 +38,10 @@ const User = struct {
     name: []const u8,
 };
 
+const RequestContext = struct {
+    app: *App,
+};
+
 const App = struct {
     io: std.Io,
     db: *pg.Pool,
@@ -45,7 +49,10 @@ const App = struct {
     fn getUser(self: *App, req: *httpz.Request) !User {
         const user_id = req.param("id").?;
 
-        var row = try self.db.row("select name from \"user\" where id = $1", .{user_id}) orelse {
+        var row = try self.db.row(
+            "select name from \"user\" where id = $1",
+            .{user_id},
+        ) orelse {
             return error.NotFound;
         };
         defer row.deinit() catch {};
@@ -59,69 +66,32 @@ const App = struct {
 
     pub fn dispatch(
         self: *App,
-        action: httpz.Action(*App),
+        action: httpz.Action(*RequestContext),
         req: *httpz.Request,
         res: *httpz.Response,
     ) !void {
         var start = std.Io.Timestamp.now(self.io, .awake);
 
-        try action(self, req, res);
+        defer {
+            const elapsed_us = start
+                .untilNow(self.io, .awake)
+                .toMicroseconds();
 
-        const elapsed_us = start
-            .untilNow(self.io, .awake)
-            .toMicroseconds();
+            std.log.info("{} {s} {d}us", .{
+                req.method,
+                req.url.path,
+                elapsed_us,
+            });
+        }
 
-        std.log.info("{} {s} {d}us", .{
-            req.method,
-            req.url.path,
-            elapsed_us,
-        });
+        var ctx = RequestContext{ .app = self };
+
+        try action(&ctx, req, res);
     }
 };
 
-fn getUser(app: *App, req: *httpz.Request, res: *httpz.Response) !void {
-    const user = try app.getUser(req);
+fn getUser(ctx: *RequestContext, req: *httpz.Request, res: *httpz.Response) !void {
+    const user = try ctx.app.getUser(req);
 
     try res.json(.{user}, .{});
-}
-
-test "while" {
-    var idx: i32 = 0;
-    var i: i32 = 0;
-    while (idx < 100) : (idx += 1) {
-        i += idx;
-    }
-    std.debug.print("i: {}\n", .{i});
-}
-
-test "for" {
-    var i: i32 = 0;
-    for (0..100) |val| {
-        i += @intCast(val);
-    }
-    std.debug.print("i: {}\n", .{i});
-}
-
-test "const" {
-    const pi: f32 = 3.14159;
-    const message = "Hello, zig!";
-
-    std.debug.print("Pi: {d:.5}, message: {s}\n", .{ pi, message });
-}
-
-test "var" {
-    var count: i32 = 0;
-    var score: i32 = 100;
-
-    count += 100;
-    score = 95;
-    std.debug.print("count: {}, score: {}\n", .{ count, score });
-}
-
-test "my_age_and_name" {
-    const name = "Meng";
-    var age: u8 = 23;
-
-    age += 1;
-    std.debug.print("name: {s}, next year age: {d}\n", .{ name, age });
 }
