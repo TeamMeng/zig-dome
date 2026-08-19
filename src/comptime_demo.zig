@@ -28,3 +28,26 @@ fn heavyComptimeComputation() u64 {
 
     return sum;
 }
+
+fn factorial(comptime n: u32) u64 {
+    if (n == 0) return 1;
+    return n * factorial(n - 1);
+}
+
+fn makeArray(comptime T: type, comptime len: usize, value: T) [len]T {
+    var result: [len]T = undefined;
+    for (&result) |*item| {
+        item.* = value;
+    }
+    return result;
+}
+
+test "factorial_and_makeArray" {
+    const result = comptime factorial(10);
+
+    std.debug.print("10! = {d}\n", .{result});
+
+    const arr = makeArray(i32, 5, 42);
+
+    std.debug.print("array: {any}\n", .{arr});
+}
