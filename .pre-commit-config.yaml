@@ -6,7 +6,7 @@ repos:
         entry: zig fmt --check
         language: system
         files: '\.zig$'
-        # vendored dependency (patched mcp 0.0.5): keep it byte-identical to
-        # upstream apart from the b.args patch, so don't reformat it.
-        exclude: '^zig-pkg/'
+        # zig-pkg/ is fetched cache, vendor/ is third-party code kept diffable
+        # against upstream: neither is formatted by us.
+        exclude: '^(zig-pkg|vendor)/'
         pass_filenames: true
