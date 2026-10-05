@@ -36,6 +36,13 @@
     // Once all dependencies are fetched, `zig build` no longer requires
     // internet connectivity.
     .dependencies = .{
+        // Pinned at 0.0.5 on purpose: 0.0.6 pulls httpx 0.2.x -> treesitter/loaders
+        // -> tint, whose build scripts still use the `b.args` removed in Zig 0.17.
+        //
+        // The copy in `zig-pkg/mcp-0.0.5-<hash>/` is vendored *and tracked on
+        // purpose*: upstream's build.zig uses `if (b.args) |args|` (removed in
+        // 0.17), so it only builds with the local `addPassthruArgs()` patch.
+        // Never delete it unless upstream gains 0.17 support.
         .mcp = .{
             .url = "git+https://github.com/muhammad-fiaz/mcp.zig.git#25b2ac418c5a62c48144eece0cb8b25ae0b45886",
             .hash = "mcp-0.0.5-cIUFgwGFBACgcv5OVy2tp7Vlc47GFpUQdaErzZDRz40C",
