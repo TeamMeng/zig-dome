@@ -1,7 +1,7 @@
 const std = @import("std");
 
 test "arrayList" {
-    var gpa = std.heap.DebugAllocator(.{}){};
+    var gpa: std.heap.SafeAllocator = .init(std.heap.page_allocator, .{});
     defer _ = gpa.deinit();
     const allocator = gpa.allocator();
 
@@ -23,7 +23,7 @@ test "arrayList" {
 }
 
 test "hashMap" {
-    var gpa = std.heap.DebugAllocator(.{}){};
+    var gpa: std.heap.SafeAllocator = .init(std.heap.page_allocator, .{});
     defer _ = gpa.deinit();
     const allocator = gpa.allocator();
 
@@ -46,7 +46,7 @@ test "hashMap" {
 }
 
 test "mem" {
-    var gpa = std.heap.DebugAllocator(.{}){};
+    var gpa: std.heap.SafeAllocator = .init(std.heap.page_allocator, .{});
     defer _ = gpa.deinit();
     const allocator = gpa.allocator();
 

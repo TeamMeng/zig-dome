@@ -8,7 +8,7 @@ A collection of Zig language feature demos and learning exercises, organized by 
 |--------|-------------|
 | [`variables`](src/variables.zig) | Container-level variables, thread-local storage, comptime variables |
 | [`integers`](src/integers.zig) | Float special values (inf, nan), strict vs optimized float mode |
-| [`arrays`](src/integers.zig) | Array declarations, comptime initialization, concatenation, repetition |
+| [`arrays`](src/arrays.zig) | Array declarations, comptime initialization, concatenation (`++`), repetition (`@splat`) |
 | [`pointer`](src/pointer.zig) | Pointer basics, slices, casting, comptime pointers, `@intFromPtr` / `@ptrFromInt` |
 | [`vector`](src/vector.zig) | SIMD vectors, vector ↔ array ↔ slice conversion, destructuring |
 
@@ -16,7 +16,7 @@ A collection of Zig language feature demos and learning exercises, organized by 
 
 ### Prerequisites
 
-- [Zig](https://ziglang.org/) `0.14.0` or later
+- [Zig](https://ziglang.org/) `0.17.0` or later
 
 ### Run Tests
 

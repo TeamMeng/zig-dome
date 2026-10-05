@@ -37,7 +37,7 @@ fn helloHandler(
 ) mcp.tools.ToolError!mcp.tools.ToolResult {
     const name = mcp.tools.getString(args, "name") orelse "World";
 
-    const message = try std.fmt.allocPrint(allocator, "Hello, {s}!", .{name});
+    const message = try allocator.print("Hello, {s}!", .{name});
 
     return mcp.tools.textResult(allocator, message);
 }

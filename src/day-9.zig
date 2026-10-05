@@ -1,3 +1,7 @@
+// NOTE: @cImport was deprecated in 0.16 and removed in 0.17. C interop now goes
+// through the external translate-c package (see the `translate_c` dependency in
+// pg.zig), or by declaring the C functions with `extern`.
+//
 // const std = @import("std");
 //
 // const c = @cImport({

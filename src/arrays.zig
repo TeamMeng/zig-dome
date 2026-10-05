@@ -50,6 +50,15 @@ comptime {
     assert(mem.eql(u8, hello_world, "hello world"));
 }
 
+// Zig 0.17 removed the array multiplication syntax (`x ** n`);
+// repetition is now expressed with `@splat`.
+const five_zeroes: [5]u8 = @splat(0);
+
+test "array repetition with @splat" {
+    try expectEqual([_]u8{ 0, 0, 0, 0, 0 }, five_zeroes);
+    try expectEqual([_]i32{ 7, 7, 7 }, @as([3]i32, @splat(7)));
+}
+
 const Point = struct {
     x: i32,
     y: i32,
