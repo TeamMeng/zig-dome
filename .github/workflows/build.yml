@@ -19,4 +19,4 @@ jobs:
       - uses: mlugg/setup-zig@v2
         with:
           mirror: https://pkg.machengine.org/zig
-      - run: zig fmt --check .
+      - run: zig fmt --check --exclude zig-pkg --exclude .zig-cache --exclude zig-out .
