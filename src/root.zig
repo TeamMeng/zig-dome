@@ -20,3 +20,4 @@ pub const http_demo = @import("http_demo.zig");
 pub const safety_demo = @import("safety-demo.zig");
 pub const error_demo = @import("error-demo.zig");
 pub const array_demo = @import("array_demo.zig");
+pub const slice_demo = @import("slice_demo.zig");
