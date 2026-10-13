@@ -26,3 +26,40 @@ fn concat(allocator: Allocator, a: []const u8, b: []const u8) ![]u8 {
     @memcpy(result[a.len..], b);
     return result;
 }
+
+fn createNumbers(allocator: std.mem.Allocator) ![]u32 {
+    const number = try allocator.alloc(u32, 3);
+
+    number[0] = 10;
+    number[1] = 20;
+    number[2] = 30;
+
+    return number;
+}
+
+fn calculateSum(numbers: []const u32) u32 {
+    var sum: u32 = 0;
+
+    for (numbers) |value| {
+        sum += value;
+    }
+
+    return sum;
+}
+
+test "allocator array" {
+    const allocator = std.testing.allocator;
+
+    const numbers = try createNumbers(allocator);
+    defer allocator.free(numbers);
+
+    const sum = calculateSum(numbers);
+
+    std.debug.print("{d}\n", .{sum});
+
+    const ptr = try allocator.create(u32);
+    defer allocator.destroy(ptr);
+
+    ptr.* = 100;
+    std.debug.print("{d}\n", .{ptr.*});
+}
