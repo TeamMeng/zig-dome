@@ -1,28 +1,12 @@
 const std = @import("std");
 
-pub fn main() !void {
-    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
-    defer arena.deinit();
+pub fn main(init: std.process.Init) !void {
+    const allocator = init.arena.allocator();
+    const args = try init.minimal.args.toSlice(allocator);
 
-    const allocator = arena.allocator();
+    std.debug.print("all {d} args\n", .{args.len});
 
-    const source_tasks = [_][]const u8{
-        "学习 Zig 基础语法",
-        "理解 Slice 的生命周期",
-        "练习 ArenaAllocator",
-    };
-
-    var tasks: [3][]const u8 = undefined;
-
-    for (source_tasks, 0..) |task, i| {
-        tasks[i] = try allocator.dupe(u8, task);
+    for (args, 0..) |arg, index| {
+        std.debug.print("arg {d}: {s}\n", .{ index, arg });
     }
-
-    std.debug.print("今日学习任务：\n", .{});
-
-    for (tasks, 0..) |task, i| {
-        std.debug.print("{d}. {s}\n", .{ i + 1, task });
-    }
-
-    std.debug.print("所有任务处理完毕。\n", .{});
 }
