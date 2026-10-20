@@ -1,53 +1,36 @@
 const std = @import("std");
 
+const file_name = "hello.txt";
+
 pub fn main(init: std.process.Init) !void {
     const io = init.io;
+    const allocator = init.gpa;
 
-    var input_buffer: [1024]u8 = undefined;
-    var output_buffer: [1024]u8 = undefined;
+    try writeFile(io);
 
-    var stdin_reader = std.Io.File.stdin().reader(io, &input_buffer);
-    var stdout_writer = std.Io.File.stdout().writer(io, &output_buffer);
+    const contents = try readFile(io, allocator);
+    defer allocator.free(contents);
 
-    const reader = &stdin_reader.interface;
-    const writer = &stdout_writer.interface;
+    std.debug.print("{s}", .{contents});
+}
 
-    try writer.writeAll("请输入第一个整数:");
-    try writer.flush();
+fn writeFile(io: std.Io) !void {
+    const file = try std.Io.Dir.cwd().createFile(
+        io,
+        file_name,
+        .{},
+    );
+    defer file.close(io);
 
-    const first_line = try reader.takeDelimiter('\n') orelse {
-        try writer.writeAll("没有读取到第一个整数.\n");
-        try writer.flush();
-        return;
-    };
+    try file.writeStreamingAll(io, "Hello, Zig\n");
+    try file.writeStreamingAll(io, "This is my first file\n");
+}
 
-    const first_text = std.mem.trim(u8, first_line, "\r");
-
-    const first_number = std.fmt.parseInt(i64, first_text, 10) catch {
-        try writer.writeAll("第一个输入不是有效的整数。\n");
-        try writer.flush();
-        return;
-    };
-
-    try writer.writeAll("请输入第二个整数:");
-    try writer.flush();
-
-    const second_line = try reader.takeDelimiter('\n') orelse {
-        try writer.writeAll("没有读取到第一个整数.\n");
-        try writer.flush();
-        return;
-    };
-
-    const second_text = std.mem.trim(u8, second_line, "\r");
-
-    const second_number = std.fmt.parseInt(i64, second_text, 10) catch {
-        try writer.writeAll("第二个输入不是有效的整数。\n");
-        try writer.flush();
-        return;
-    };
-
-    const result = first_number + second_number;
-
-    try writer.print("result: {d}\n", .{result});
-    try writer.flush();
+fn readFile(io: std.Io, allocator: std.mem.Allocator) ![]u8 {
+    return try std.Io.Dir.cwd().readFileAlloc(
+        io,
+        file_name,
+        allocator,
+        .limited(1024 * 1024),
+    );
 }
