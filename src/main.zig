@@ -1,12 +1,18 @@
 const std = @import("std");
 
 pub fn main(init: std.process.Init) !void {
-    const allocator = init.arena.allocator();
-    const args = try init.minimal.args.toSlice(allocator);
+    const io = init.io;
 
-    std.debug.print("all {d} args\n", .{args.len});
+    try std.Io.File.stdout().writeStreamingAll(io, "Hello, Zig\n");
 
-    for (args, 0..) |arg, index| {
-        std.debug.print("arg {d}: {s}\n", .{ index, arg });
-    }
+    var output_buffer: [1024]u8 = undefined;
+
+    var stdout_writer = std.Io.File.stdout().writer(io, &output_buffer);
+
+    const writer = &stdout_writer.interface;
+
+    try writer.print("Hello {s}\n", .{"Xiao Ming"});
+    try writer.print("Your age is {d}\n", .{18});
+
+    try writer.flush();
 }
