@@ -23,3 +23,4 @@ pub const array_demo = @import("array_demo.zig");
 pub const slice_demo = @import("slice_demo.zig");
 pub const string_demo = @import("string_demo.zig");
 pub const arenaAllocator_demo = @import("arenaAllocator_demo.zig");
+pub const async_demo = @import("async_demo.zig");
